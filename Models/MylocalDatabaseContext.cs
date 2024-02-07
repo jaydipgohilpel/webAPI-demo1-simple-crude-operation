@@ -19,10 +19,11 @@ public partial class MylocalDatabaseContext : DbContext
 
     public virtual DbSet<Student> Students { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectModels;Database=mylocalDatabase;Trusted_Connection=True");
+    public virtual DbSet<User> User { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Employee>(entity =>
@@ -46,6 +47,17 @@ public partial class MylocalDatabaseContext : DbContext
             entity.Property(e => e.StudentName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(e => e.Password)
+                .HasMaxLength(10)
+                .IsFixedLength();
+            entity.Property(e => e.UserName)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .IsFixedLength();
         });
 
         OnModelCreatingPartial(modelBuilder);
